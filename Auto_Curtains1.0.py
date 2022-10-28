@@ -151,58 +151,69 @@ EN.value(1)  		# high is stop
 DIR.value(1)     # high is CCW looking down on shaft
 
 def Open():
-    if OPEN == True:
-        EN.value(1)
     if CLOSE == True:
         DIR.value(CW)
         EN.value(0)
+    elif OPEN == True:
+        EN.value(1)
+        return True
         
 def Close():
-    if CLOSE == True:
-        EN.value(1)
     if OPEN == True:
         DIR.value(CCW)
         EN.value(0)
+    elif CLOSE == True:
+        EN.value(1)
+        return True
     
 def Holidays():
-    day_of_month_str == 01/01 or 02/21 or 04/15 or 05/23 or 07/01 or 08/01 or 09/05 or 10/10 or 12/25
+    if day_of_month_str != (01/01, 02/21, 04/15, 05/23, 07/01, 08/01, 09/05, 10/10, 12/25):
+        return False
+    elif day_of_month_str == (01/01, 02/21, 04/15, 05/23, 07/01, 08/01, 09/05, 10/10, 12/25):
+        return True
 
 def Weekday():
     for d in range(0, 5, 1):
         if Holiday == True:
             return False
-        if day_of_month_str == [d]
+        elif day_of_month_str == [d]:
+            return True
         
 def Weekend():
     for e in range(7, 0, -1):
-        if day_of_month_str = [e]:
+        if day_of_month_str == [e]:
+            print(e)
             if Holiday == True:
                 return False
-            if Weekday == True:
+            elif Weekday == True:
                 return False
-            if Weekday == False:
+            elif Weekday == False:
                 return True
-    
-def Late_Months():
-    month = 01 or 02 or 03 or 11 or 12:
-        return True
     
 def Early_Months():
     for m in range(03, 10, 1):
-        if month = [m]:
+        if month == [m]:
+            return True
+        
+def Late_Months():
+    for m in range(03, 10, 1):
+        if month == [m]:
+            return False
+        elif month != [m]:
             return True
 
 def Sunrise():
     if Weekday == True:
-        if Late_Months == True:		# Sunrise is at or before 8A.M. these months.
-            if hour == 08
         if Early_Months == True:	# Sunrise is at or before 6A.M. these months.
             if hour == 06:
                 return True
-    if Weekend == True:
+        elif Late_Months == True:		# Sunrise is at or before 8A.M. these months.
+            if hour == 08:
+                return True
+    elif Weekend == True:
         if hour == 09:
             return True
-    if Holidays == True:
+    elif Holidays == True:
         if hour == 09:
             return True
             
@@ -219,7 +230,18 @@ while True:
             if CLOSE == True:
                 DIR.value(CW)
                 EN.value(0)
-        if Sunrise == True:
+        elif Sunrise == True:
             Open()
-        if Sunset == True:
+        elif Sunset == True:
             Close()
+    
+    except OSError as e:
+        cl.close()
+        print('Connection closed')
+        
+    except KeyboardInterrupt:
+        led_on_board.value(0)
+        EN.value(1)
+        STEP.value(0)
+        print("\nExiting application\n")
+        machine.reset
